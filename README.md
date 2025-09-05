@@ -8,7 +8,7 @@
     body {
       margin: 0;
       font-family: 'Segoe UI', Tahoma, sans-serif;
-      background: linear-gradient(to bottom, #ffffff, #ffc0cb); /* 🔹 White & Pink gradient */
+      background: linear-gradient(to bottom, #ffffff, #ffc0cb);
       min-height: 100vh;
       display: grid;
       place-items: center;
@@ -17,7 +17,7 @@
     }
     .form-container {
       width: 400px;
-      background: #ffffff; /* 🔹 Form white */
+      background: #ffffff;
       border: 1px solid #ffc0cb;
       border-radius: 20px;
       padding: 28px;
@@ -26,13 +26,13 @@
     h2 { 
       margin: 0 0 16px; 
       text-align: center; 
-      color: #d63384; /* 🔹 Heading in pink shade */
+      color: #d63384;
     }
     .form-group { margin: 14px 0; text-align: left; }
     label { 
       display:block; 
       margin-bottom:6px; 
-      color:#d63384; /* 🔹 Labels pink */
+      color:#d63384;
       font-weight:700; 
       font-size:15px;
     }
@@ -40,7 +40,7 @@
       width: calc(100% - 20px);
       padding:12px 14px; 
       border-radius:14px;
-      border:1px solid #ffc0cb; /* 🔹 Pink outline */
+      border:1px solid #ffc0cb;
       background: #fff; 
       color:#333; 
       outline:none; 
@@ -59,7 +59,7 @@
       padding:13px; 
       border:0; 
       border-radius:14px;
-      background: #d63384; /* 🔹 Solid pink, no gradient */
+      background: #d63384;
       color:#fff;
       font-weight:700; 
       letter-spacing:.3px; 
@@ -70,14 +70,17 @@
       margin-left: auto;
       margin-right: auto;
     }
-    button:hover { box-shadow:0 12px 26px rgba(255,192,203,.6); } /* 🔹 Soft pink glow */
+    button:hover { box-shadow:0 12px 26px rgba(255,192,203,.6); }
     .note { margin-top:12px; font-size:12px; text-align:center; opacity:.8; color:#666; }
+    .message { margin-top:12px; font-size:14px; text-align:center; font-weight:600; }
+    .success { color: green; }
+    .error { color: red; }
   </style>
 </head>
 <body>
   <div class="form-container">
     <h2>Submit Your Info</h2>
-    <form action="https:https://hook.eu2.make.com/7ubn8ca7mosgsqvjxzcjh7twhh2r7ru9" method="POST" autocomplete="off">
+    <form id="leadForm" autocomplete="off">
       
       <div class="form-group">
         <label for="name">Name</label>
@@ -106,7 +109,45 @@
 
       <button type="submit">Submit</button>
       <div class="note">Powered by Make Webhook</div>
+      <div id="formMessage" class="message"></div>
     </form>
   </div>
+
+  <script>
+    document.getElementById("leadForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+
+      const form = e.target;
+      const data = {
+        name: form.name.value,
+        email: form.email.value,
+        company: form.company.value,
+        budget: form.budget.value,
+        interested_service: form.interested_service.value
+      };
+
+      try {
+        const res = await fetch("https://hook.eu2.make.com/7ubn8ca7mosgsqvjxzcjh7twhh2r7ru9", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+
+        const msg = document.getElementById("formMessage");
+        if (res.ok) {
+          msg.textContent = "✅ Submitted successfully!";
+          msg.className = "message success";
+          form.reset();
+        } else {
+          msg.textContent = "❌ Submission failed. Try again.";
+          msg.className = "message error";
+        }
+      } catch (err) {
+        document.getElementById("formMessage").textContent = "⚠️ Network error.";
+        document.getElementById("formMessage").className = "message error";
+      }
+    });
+  </script>
 </body>
 </html>
+
