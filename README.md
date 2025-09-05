@@ -77,7 +77,7 @@
 <body>
   <div class="form-container">
     <h2>Submit Your Info</h2>
-    <form action="https://https://hook.eu2.make.com/7ubn8ca7mosgsqvjxzcjh7twhh2r7ru9" method="POST" autocomplete="off">
+    <form action="https:https://hook.eu2.make.com/7ubn8ca7mosgsqvjxzcjh7twhh2r7ru9" method="POST" autocomplete="off">
       
       <div class="form-group">
         <label for="name">Name</label>
